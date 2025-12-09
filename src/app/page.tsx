@@ -53,6 +53,14 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
         <div className="w-full max-w-md space-y-8">
+            <div className="text-center space-y-2">
+                <h1 className="text-6xl font-bold text-green-500">
+                    Hush
+                </h1>
+                <p className="text-zinc-500 text-sm">
+                    A secure chat room for your private conversations.
+                </p>
+            </div>
             <div className="border border-zinc-800 bg-zinc-900/50 p-6 backdrop-blur-md rounded-2xl">
                 <div className="space-y-5">
                     <div className="space-y-2">
