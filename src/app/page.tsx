@@ -1,6 +1,8 @@
 "use client";
 import {useEffect, useState} from "react";
 import {nanoid} from "nanoid";
+import {useMutation} from "@tanstack/react-query";
+import {client} from "@/lib/client";
 
 const ANIMALS = [
     "cat",
@@ -50,6 +52,12 @@ export default function Home() {
 
         main();
     }, []);
+
+    const {mutate: createRoom} = useMutation({mutationFn: async () => {
+            const res = await client.room.create.post()
+        }
+    });
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4">
         <div className="w-full max-w-md space-y-8">
@@ -67,7 +75,7 @@ export default function Home() {
                         <label className="flex items-center text-zinc-500">Your Identity</label>
                         <div className="flex-1 bg-zinc-950 broder border-zinc-800 p-3 text-sm text-zinc-400 font-mono rounded-xl">{username}</div>
                     </div>
-                    <button className="w-full bg-zinc-100 text-black p-3 text-sm font-bold hover:bg-zinc-50 hover:text-black transition-colors mt-2 cursor-pointer disabled:opacity-50 rounded-full">Create Secure Room</button>
+                    <button onClick={() => createRoom()} className="w-full bg-zinc-100 text-black p-3 text-sm font-bold hover:bg-zinc-50 hover:text-black transition-colors mt-2 cursor-pointer disabled:opacity-50 rounded-full">Create Secure Room</button>
                 </div>
             </div>
         </div>
