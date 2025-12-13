@@ -30,15 +30,15 @@ const Page = () => {
         }, 2000)
     }
 
-    const {mutate:sendMessage} = useMutation({
-        mutationFn: async ({text}: {text: string}) => {
-            await client.messages.post({sender: username, text}, {
-                query:{
-                    roomId
-                }
-            })
-        }
-    })
+    // const {mutate:sendMessage} = useMutation({
+    //     mutationFn: async ({text}: {text: string}) => {
+    //         await client.messages.post({sender: username, text}, {
+    //             query:{
+    //                 roomId
+    //             }
+    //         })
+    //     }
+    // })
 
     return (
         <main className="flex flex-col h-screen max-h-screen overflow-hidden">
@@ -71,7 +71,7 @@ const Page = () => {
                 <div className="flex gap-4">
                     <div className="flex-1 relative group">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-green-500 animate-pulse">{"Type"}</span>
-                        <input type="text" value={input} onKeyDown={(e) => {if (e.key === "Enter" && input.trim()) {inputRef.current?.focus()}}} onChange={(e) => setInput(e.target.value)} className="w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-15 pr-4 text-sm rounded-full" placeholder="Type message..." />
+                        <input type="text" value={input} onKeyDown={(e) => {if (e.key === "Enter" && input.trim()) { inputRef.current?.focus()}}} onChange={(e) => setInput(e.target.value)} className="w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-15 pr-4 text-sm rounded-full" placeholder="Type message..." />
                     </div>
                     <button className="bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer rounded-full">Send</button>
                 </div>
