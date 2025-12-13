@@ -2,6 +2,9 @@
 
 import {useParams} from "next/navigation";
 import {useRef, useState} from "react";
+import {client} from "@/lib/client";
+import {useMutation} from "@tanstack/react-query";
+import {useUsername} from "@/app/hooks/username";
 
 function formatTime(seconds: number){
     const mins = Math.floor(seconds / 60)
@@ -12,6 +15,7 @@ function formatTime(seconds: number){
 const Page = () => {
     const params = useParams();
     const roomId = params.roomId as string
+    const {username} = useUsername();
     const [copyStatus, setCopyStatus] = useState("COPY");
     const [time, setTime] = useState<number | null>(40)
     const [input, setInput] = useState("")
@@ -25,6 +29,16 @@ const Page = () => {
             setCopyStatus("COPY")
         }, 2000)
     }
+
+    const {mutate:sendMessage} = useMutation({
+        mutationFn: async ({text}: {text: string}) => {
+            await client.messages.post({sender: username, text}, {
+                query:{
+                    roomId
+                }
+            })
+        }
+    })
 
     return (
         <main className="flex flex-col h-screen max-h-screen overflow-hidden">
