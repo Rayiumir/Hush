@@ -7,7 +7,6 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {useUsername} from "@/app/hooks/username";
 import {format} from "date-fns";
 import {useRealtime} from "@/lib/realtime-client";
-import {refresh} from "next/cache";
 
 function formatTime(seconds: number){
     const mins = Math.floor(seconds / 60)
@@ -28,7 +27,7 @@ const Page = () => {
     const [input, setInput] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const {data: messages} = useQuery({
+    const {data: messages, refetch} = useQuery({
         queryKey: ["messages", roomId],
         queryFn: async () => {
             const res = await client.messages.get({
@@ -45,6 +44,7 @@ const Page = () => {
         events: ["chat.message", "chat.destroy"],
         onData: ({event}) => {
             if (event === "chat.message"){
+                refetch()
             }
 
             if (event === "chat.destroy"){
