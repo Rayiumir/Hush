@@ -1,7 +1,7 @@
 "use client"
 
 import {useParams, useRouter, useSearchParams} from "next/navigation";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {client} from "@/lib/client";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {useUsername} from "@/app/hooks/username";
@@ -23,7 +23,7 @@ const Page = () => {
     const error = searchParams.get("error");
     const {username} = useUsername();
     const [copyStatus, setCopyStatus] = useState("COPY");
-    const [time, setTime] = useState<number | null>(40)
+    const [time, setTime] = useState<number | null>(null)
     const [input, setInput] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -73,6 +73,43 @@ const Page = () => {
             setInput("")
         },
     })
+
+    const {data: ttlData} = useQuery({
+        queryKey: ["ttl", roomId],
+        queryFn: async () => {
+            const res = await client.room.ttl.get({
+                query:{
+                    roomId
+                }
+            })
+            return res.data
+        },
+    })
+
+    useEffect(() => {
+        if (ttlData?.ttl !== undefined)
+            setTime(ttlData.ttl)
+    }, [ttlData])
+
+    useEffect(() => {
+        if (time === null || time < 0) return;
+
+        if (time === 0){
+            router.push("/?destoryed=true")
+            return;
+        }
+
+        const interval = setInterval(() => {
+            setTime((prev) =>{
+                if (prev === null || prev <= 1) {
+                    clearInterval(interval)
+                    return 0;
+                }
+                return prev - 1;
+            })
+        }, 1000)
+        return () => clearInterval(interval);
+    }, [time, router]);
 
     return (
         <main className="flex flex-col h-screen max-h-screen overflow-hidden">
