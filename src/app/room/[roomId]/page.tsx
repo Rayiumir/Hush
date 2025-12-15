@@ -53,6 +53,16 @@ const Page = () => {
         },
     })
 
+    const {mutate: destoryRoom} = useMutation({
+        mutationFn: async () => {
+            await client.room.delete(null,{
+                query:{
+                    roomId
+                }
+            })
+        },
+    })
+
     const copyLink = () => {
         const url = window.location.href
         navigator.clipboard.writeText(url)
@@ -133,7 +143,7 @@ const Page = () => {
                         </div>
                     </div>
                 </div>
-                <button className="text-xs bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded-full text-zinc-400 hover:text-white font-bold transition-all group flex items-center gap-2 disabled:opacity-50">Destroy Room</button>
+                <button onClick={() => destoryRoom()} className="text-xs bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded-full text-zinc-400 hover:text-white font-bold transition-all group flex items-center gap-2 disabled:opacity-50">Destroy Room</button>
             </header>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin">

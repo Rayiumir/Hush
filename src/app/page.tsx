@@ -6,13 +6,23 @@ import {client} from "@/lib/client";
 import {useRouter} from "next/navigation";
 import {useUsername} from "@/app/hooks/username";
 import { useSearchParams } from 'next/navigation';
+import {Suspense} from "react";
 
-export default function Home() {
+const Page = () => {
+    return(
+        <Suspense>
+            <Lobby />
+        </Suspense>
+    )
+}
+
+export default Page;
+function Lobby() {
     const {username} = useUsername();
     const router = useRouter();
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
-    const wasDestroyed = false;
+    const wasDestroyed = searchParams.get("destroyed") === "true";
 
     const {mutate: createRoom} = useMutation({
         mutationFn: async () => {
